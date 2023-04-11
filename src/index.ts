@@ -1,7 +1,7 @@
 interface Request { user: string, password: string }
 import express from "express"
 import { AuthenticationOptions, authenticate } from "ldap-authentication"
-import { createToken } from "./config/jwtConfig"
+import { createToken } from "@/config/jwtConfig"
 import dotenv from 'dotenv'
 dotenv.config()
 const app = express()
