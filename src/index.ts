@@ -2,6 +2,8 @@ interface Request { user: string, password: string }
 import express from "express"
 import { AuthenticationOptions, authenticate } from "ldap-authentication"
 import { createToken } from "./config/jwtConfig"
+import dotenv from 'dotenv'
+dotenv.config()
 const app = express()
 
 app.use(express.json())
@@ -19,13 +21,11 @@ app.get('/', async (req, res) => {
 
     const options: AuthenticationOptions = {
       ldapOpts: {
-        url: 'ldap://192.168.18.5:389',
+        url: process.env.LDAP_URL,
       },
-      userDn: `${user}@claretiano.rede`,
+      userDn: `${user}@${process.env.DOMAIN}`,
       userPassword: password,
-      userSearchBase: 'dc=claretiano.rede,dc=bho-dc-01',
-      groupsSearchBase: 'dc=claretiano.rede,dc=bho-dc-01'
-
+      userSearchBase: process.env.DOMAIN_CONTROLLER,
     }
 
     const authUser: boolean = await authenticate(options)
@@ -41,6 +41,6 @@ app.get('/', async (req, res) => {
   }
 })
 
-app.listen(3000, () => {
-  console.log(`Running on 3000...`)
+app.listen(process.env.PORT, () => {
+  console.log(`Running on ${process.env.PORT}...`)
 })
